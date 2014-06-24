@@ -1,0 +1,33 @@
+# OSX
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+
+# XCode 
+
+*.xcscheme
+*.xcsettings
+*.xcworkspacedata
+*.xcworkspace
+*.xcuserdatad
+*.mode*v3
+*.pbxuser
+*.depend
+*.layout
+
+# Folder
+
+obj/
+bin/
+build/
+!data/
+
+# Other
+
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.app*
