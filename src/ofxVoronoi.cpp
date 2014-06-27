@@ -38,7 +38,9 @@ void ofxVoronoi::generate() {
                 do {
                     float x = currentPoint[0] + 0.5 * conCell.pts[2*k];
                     float y = currentPoint[1] + 0.5 * conCell.pts[2*k+1];
-                    newCell.pts.push_back(ofPoint(x, y));
+                    
+                    ofPoint pt = ofPoint(x, y);
+                    newCell.pts.push_back(pt);
                     
                     k = conCell.ed[2*k];
                 } while(k!=0);
@@ -62,25 +64,33 @@ void ofxVoronoi::draw() {
     ofRect(bounds);
     
     ofSetColor(180, 0, 0);
-
-    for(std::vector<ofxVoronoiCell>::iterator it=cells.begin(); it!=cells.end(); ++it) {
+    
+    for(int i=0; i<cells.size(); i++) {
         // Draw cell borders
-        ofPath path;
-        
-        path.setStrokeColor(ofColor(180));
-        path.setStrokeWidth(1);
-        path.setFilled(false);
-        
-        for(int j=0; j<it->pts.size(); j++) {
-            path.lineTo(it->pts[j]);
+        ofSetColor(120);
+        for(int j=0; j<cells[i].pts.size(); j++) {
+            ofPoint lastPt = cells[i].pts[cells[i].pts.size()-1];
+            if(j > 0) {
+                lastPt = cells[i].pts[j-1];
+            }
+            ofPoint thisPt = cells[i].pts[j];
+            
+            if(!isBorder(lastPt) || !isBorder(thisPt)) {
+                ofLine(lastPt, thisPt);
+            }
         }
         
-        path.close();
-        path.draw();
-        
         // Draw cell points
-        ofCircle(it->pt, 2);
+        ofSetColor(180, 0, 0);
+        ofFill();
+        ofCircle(cells[i].pt, 2);
     }
+}
+
+//--------------------------------------------------------------
+bool ofxVoronoi::isBorder(ofPoint _pt){
+    return (_pt.x == bounds.x || _pt.x == bounds.x+bounds.width
+            || _pt.y == bounds.y || _pt.y == bounds.y+bounds.height);
 }
 
 //--------------------------------------------------------------

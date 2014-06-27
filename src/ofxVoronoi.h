@@ -1,5 +1,6 @@
 #pragma once
 
+// Voro++2D
 #include "config.hh"
 #include "common.hh"
 #include "cell_2d.hh"
@@ -11,6 +12,9 @@
 #include "wall_2d.hh"
 #include "cell_nc_2d.hh"
 #include "ctr_boundary_2d.hh"
+
+// Triangle
+//#include "triangle.h"
 
 #include "ofMain.h"
 
@@ -33,6 +37,8 @@ public:
     void clear();
     void generate();
     void draw();
+    
+    bool isBorder(ofPoint _pt);
     
     void setBounds(ofRectangle _bounds);
     void setPoints(vector<ofPoint> _points);
