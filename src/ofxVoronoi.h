@@ -1,22 +1,20 @@
 #pragma once
 
-// Voro++2D
-#include "config.hh"
-#include "common.hh"
-#include "cell_2d.hh"
-#include "v_base_2d.hh"
-#include "rad_option.hh"
-#include "container_2d.hh"
-#include "v_compute_2d.hh"
-#include "c_loops_2d.hh"
-#include "wall_2d.hh"
-#include "cell_nc_2d.hh"
-#include "ctr_boundary_2d.hh"
-
-// Triangle
-//#include "triangle.h"
-
+// openFrameworks
 #include "ofMain.h"
+
+// Voro++2D
+#include "config.h"
+#include "common.h"
+#include "cell_2d.h"
+#include "v_base_2d.h"
+#include "rad_option.h"
+#include "container_2d.h"
+#include "v_compute_2d.h"
+#include "c_loops_2d.h"
+#include "wall_2d.h"
+#include "cell_nc_2d.h"
+#include "ctr_boundary_2d.h"
 
 class ofxVoronoiCell {
   public:
