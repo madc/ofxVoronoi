@@ -15,7 +15,7 @@
 #include <vector>
 using namespace std;
 
-#include "config.hh"
+#include "config.h"
 
 namespace voro {
 

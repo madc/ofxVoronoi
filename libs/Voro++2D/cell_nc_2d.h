@@ -11,7 +11,7 @@
 #ifndef VORO_CELL_NC_2D_HH
 #define VORO_CELL_NC_2D_HH
 
-#include "cell_2d.hh"
+#include "cell_2d.h"
 
 namespace voro {
 

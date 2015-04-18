@@ -10,8 +10,8 @@
 #include <vector>
 using namespace std;
 
-#include "common.hh"
-#include "config.hh"
+#include "common.h"
+#include "config.h"
 
 namespace voro {
 

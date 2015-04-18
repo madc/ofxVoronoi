@@ -16,13 +16,13 @@
 #include <vector>
 using namespace std;
 
-#include "config.hh"
-#include "common.hh"
-#include "v_base_2d.hh"
-#include "cell_2d.hh"
-#include "c_loops_2d.hh"
-#include "rad_option.hh"
-#include "v_compute_2d.hh"
+#include "config.h"
+#include "common.h"
+#include "v_base_2d.h"
+#include "cell_2d.h"
+#include "c_loops_2d.h"
+#include "rad_option.h"
+#include "v_compute_2d.h"
 
 namespace voro {
 

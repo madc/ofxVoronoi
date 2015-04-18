@@ -10,9 +10,9 @@
 #ifndef VOROPP_V_BASE_2D_HH
 #define VOROPP_V_BASE_2D_HH
 
-#include "worklist_2d.hh"
-#include <stdio.h>
-#include <stdlib.h>
+#include "worklist_2d.h"
+//#include <stdio.h>
+//#include <stdlib.h>
 namespace voro {
 
 /** \brief Class containing data structures common across all particle container classes.
@@ -25,8 +25,8 @@ namespace voro {
  * all container classes. */
 class voro_base_2d {
 	public:
-	        /** total number of particles. */
-		int totpar;
+//	        /** total number of particles. */
+//		int totpar;
 		/** The number of blocks in the x direction. */
 		const int nx;
 		/** The number of blocks in the y direction. */
@@ -47,20 +47,24 @@ class voro_base_2d {
 		 * worklists. This array is initialized during container
 		 * construction, by the initialize_radii() routine. */
 		double *mrad;
-		/** The pre-computed block worklists. */
-		unsigned int *globne;
-		/** global neighbor information */
-		inline void init_globne(){
-			globne = new unsigned int[((totpar*totpar)/32)+1];
-			for(int i=0;i<((totpar*totpar)/32);i++){
-				globne[i] = 0;
-			}
-		}
-		void add_globne_info(int pid, int *nel, int length);
-		void print_globne(FILE *fp);
-		static const unsigned int wl[wl_seq_length_2d*wl_hgridsq_2d];
+//		/** The pre-computed block worklists. */
+//		unsigned int *globne;
+//		/** global neighbor information */
+//		inline void init_globne(){
+//			globne = new unsigned int[((totpar*totpar)/32)+1];
+//			for(int i=0;i<((totpar*totpar)/32);i++){
+//				globne[i] = 0;
+//			}
+//		}
+//		void add_globne_info(int pid, int *nel, int length);
+//		void print_globne(FILE *fp);
+    const static unsigned int wl[];
+    //static const unsigned int w[];
+    //static unsigned int w[];
+    //static const unsigned int wl[];//[wl_seq_length_2d*wl_hgridsq_2d];
+    
 		bool contains_neighbor(const char* format);
-		bool contains_neighbor_global(const char* format);
+//		bool contains_neighbor_global(const char* format);
 		voro_base_2d(int nx_,int ny_,double boxx_,double boxy_);
 		~voro_base_2d() {delete [] mrad;}
 	protected:
