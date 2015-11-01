@@ -14,7 +14,7 @@ Added support for [Lloyd's algorithm](https://en.wikipedia.org/wiki/Lloyd%27s_al
 
 Example:  
 Create as usual
-`
+```
 ofxVoronoi relaxedVoronoi;
 relaxedVoronoi.setBounds(bounds);
 setPoints(points);
@@ -24,5 +24,5 @@ int relaxIterations = 3;
 while(relaxIterations--){
 	relaxedVoronoi.relax();
 }
-`
+```
 
