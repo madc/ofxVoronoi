@@ -17,7 +17,7 @@ Create as usual
 ```
 ofxVoronoi relaxedVoronoi;
 relaxedVoronoi.setBounds(bounds);
-setPoints(points);
+relaxedVoronoi.setPoints(points);
 relaxedVoronoi.generate();
 
 int relaxIterations = 3;
