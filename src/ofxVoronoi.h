@@ -47,4 +47,7 @@ public:
     vector<ofPoint> getPoints();
     vector <ofxVoronoiCell> getCells();
     ofxVoronoiCell& getCell(ofPoint _point);
+    
+    //borg
+    void relax();
 };
