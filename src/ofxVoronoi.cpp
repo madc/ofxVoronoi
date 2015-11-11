@@ -57,11 +57,11 @@ void ofxVoronoi::generate() {
 //--------------------------------------------------------------
 void ofxVoronoi::draw() {
     ofSetLineWidth(0);
-    ofFill();
+    ofNoFill();
     
     // Draw bounds
     ofSetColor(220);
-    ofRect(bounds);
+    ofDrawRectangle(bounds);
     
     ofSetColor(180, 0, 0);
     
@@ -76,14 +76,15 @@ void ofxVoronoi::draw() {
             ofPoint thisPt = cells[i].pts[j];
             
             if(!isBorder(lastPt) || !isBorder(thisPt)) {
-                ofLine(lastPt, thisPt);
+                ofDrawLine(lastPt, thisPt);
             }
         }
         
+        ofFill();
         // Draw cell points
         ofSetColor(180, 0, 0);
         ofFill();
-        ofCircle(cells[i].pt, 2);
+        ofDrawCircle(cells[i].pt, 2);
     }
 }
 
@@ -132,6 +133,22 @@ vector <ofxVoronoiCell> ofxVoronoi::getCells() {
     return cells;
 }
 
+
+//https://en.wikipedia.org/wiki/Lloyd%27s_algorithm
+void ofxVoronoi::relax(){
+    vector<ofPoint> relaxPts;
+    for(int i=0; i<cells.size(); i++) {
+        ofPolyline p;
+        p.addVertices(cells[i].pts);
+        p.close();
+        ofPoint centroid = p.getCentroid2D();
+        relaxPts.push_back(centroid);
+    }
+    clear();
+    points = relaxPts;
+    generate();
+};
+
 //--------------------------------------------------------------
 ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point) {
     for(std::vector<ofxVoronoiCell>::iterator it=cells.begin(); it!=cells.end(); ++it) {
@@ -140,3 +157,6 @@ ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point) {
         }
     }
 }
+
+
+
