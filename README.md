@@ -26,5 +26,7 @@ while(relaxIterations--){
 ```
 Contributors: 
 [Todd Vanderlin](https://github.com/vanderlin)
+
 [Matthias Esterl](https://github.com/madc) 
+
 [Andreas Borg](https://github.com/borg)
