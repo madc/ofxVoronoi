@@ -7,6 +7,7 @@ class ofApp : public ofBaseApp{
     private:
         vector <ofPoint> generateRandomPoints(int count, int seed, ofRectangle bounds);
         ofxVoronoi voronoi;
+        vector<ofPoint> points;
     
         bool isBorder(ofPoint _pt);
     
