@@ -3,19 +3,6 @@
 // openFrameworks
 #include "ofMain.h"
 
-// Voro++2D
-#include "config.h"
-#include "common.h"
-#include "cell_2d.h"
-#include "v_base_2d.h"
-#include "rad_option.h"
-#include "container_2d.h"
-#include "v_compute_2d.h"
-#include "c_loops_2d.h"
-#include "wall_2d.h"
-#include "cell_nc_2d.h"
-#include "ctr_boundary_2d.h"
-
 class ofxVoronoiCell {
   public:
     vector<ofPoint> pts;
@@ -33,7 +20,7 @@ public:
     ~ofxVoronoi();
     
     void clear();
-    void generate();
+    void generate(bool ordered=true);
     void draw();
     
     bool isBorder(ofPoint _pt);
@@ -44,9 +31,9 @@ public:
     void addPoints(vector<ofPoint> _points);
     
     ofRectangle getBounds();
-    vector<ofPoint> getPoints();
-    vector <ofxVoronoiCell> getCells();
-    ofxVoronoiCell& getCell(ofPoint _point);
+    vector<ofPoint>& getPoints();
+    vector <ofxVoronoiCell>& getCells();
+    ofxVoronoiCell& getCell(ofPoint _point, bool approximate=false);
     
     //borg
     void relax();

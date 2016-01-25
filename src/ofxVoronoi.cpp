@@ -1,5 +1,18 @@
 #include "ofxVoronoi.h"
 
+// Voro++2D
+#include "config.h"
+#include "common.h"
+#include "cell_2d.h"
+#include "v_base_2d.h"
+#include "rad_option.h"
+#include "container_2d.h"
+#include "v_compute_2d.h"
+#include "c_loops_2d.h"
+#include "wall_2d.h"
+#include "cell_nc_2d.h"
+#include "ctr_boundary_2d.h"
+
 //--------------------------------------------------------------
 ofxVoronoi::ofxVoronoi() {}
 
@@ -13,7 +26,7 @@ void ofxVoronoi::clear() {
 }
 
 //--------------------------------------------------------------
-void ofxVoronoi::generate() {
+void ofxVoronoi::generate(bool ordered) {
     voro::container_2d* con = new voro::container_2d(bounds.x, bounds.x+bounds.getWidth(), bounds.y, bounds.y+bounds.getHeight(), 10, 10, false, false, 16);
     voro::c_loop_all_2d* vl = new voro::c_loop_all_2d(*con);
     voro::voronoicell_2d conCell;
@@ -52,6 +65,15 @@ void ofxVoronoi::generate() {
     
     // free up the memory
     delete con, vl;
+    
+    if(ordered) {
+        vector<ofxVoronoiCell> orderedCells;
+        for(auto& pt : points) {
+//            ofLog() << pt;
+            orderedCells.push_back(getCell(pt));
+        }
+        cells = orderedCells;
+    }
 }
 
 //--------------------------------------------------------------
@@ -124,12 +146,12 @@ ofRectangle ofxVoronoi::getBounds() {
 }
 
 //--------------------------------------------------------------
-vector<ofPoint> ofxVoronoi::getPoints() {
+vector<ofPoint>& ofxVoronoi::getPoints() {
     return points;
 }
 
 //--------------------------------------------------------------
-vector <ofxVoronoiCell> ofxVoronoi::getCells() {
+vector <ofxVoronoiCell>& ofxVoronoi::getCells() {
     return cells;
 }
 
@@ -150,11 +172,26 @@ void ofxVoronoi::relax(){
 };
 
 //--------------------------------------------------------------
-ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point) {
-    for(std::vector<ofxVoronoiCell>::iterator it=cells.begin(); it!=cells.end(); ++it) {
-        if(_point == it->pt) {
-            return *it;
+ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point, bool approximate) {
+    if(approximate) {
+        ofxVoronoiCell& nearestCell = cells[0];
+        float nearestDistance = numeric_limits<float>::infinity();
+        for(ofxVoronoiCell& cell : cells) {
+            float distance = _point.squareDistance(cell.pt);
+            if(distance < nearestDistance) {
+                nearestDistance = distance;
+                nearestCell = cell;
+            }
         }
+        return nearestCell;
+    } else {
+        for(ofxVoronoiCell& cell : cells) {
+            if(_point == cell.pt) {
+                return cell;
+            }
+        }
+        ofLogError("ofxVoronoi") << "getCell could not find exact match for " << _point;
+        return cells[0];
     }
 }
 

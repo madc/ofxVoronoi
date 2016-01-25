@@ -10,12 +10,17 @@ void ofApp::setup(){
     int pointCount = 255;
     int seed = 33;
     
-    vector<ofPoint> points = generateRandomPoints(pointCount, seed, bounds);
+    points = generateRandomPoints(pointCount, seed, bounds);
     
     voronoi.setBounds(bounds);
     voronoi.setPoints(points);
     
     voronoi.generate();
+    
+    points.clear();
+    for(auto cell : voronoi.getCells()) {
+        points.push_back(cell.pt);
+    }
 }
 
 //--------------------------------------------------------------
@@ -25,42 +30,38 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
-    voronoi.draw();
+//    voronoi.draw();
     
     // Or feel free to draw the voronoi diagram yourself:
     
-//    vector <ofxVoronoiCell> cells = voronoi.getCells();
-//    ofRectangle bounds = voronoi.getBounds();
-//    
-//    ofSetLineWidth(0);
-//    ofFill();
-//    
-//    // Draw bounds
-//    ofSetColor(220);
-//    ofRect(bounds);
-//    
-//    ofSetColor(180, 0, 0);
-//    
-//    for(int i=0; i<cells.size(); i++) {
-//        // Draw cell borders
-//        ofSetColor(120);
-//        for(int j=0; j<cells[i].pts.size(); j++) {
-//            ofPoint lastPt = cells[i].pts[cells[i].pts.size()-1];
-//            if(j > 0) {
-//                lastPt = cells[i].pts[j-1];
-//            }
-//            ofPoint thisPt = cells[i].pts[j];
-//            
-//            if(!isBorder(lastPt) || !isBorder(thisPt)) {
-//                ofLine(lastPt, thisPt);
-//            }
-//        }
-//        
-//        // Draw cell points
-//        ofSetColor(180, 0, 0);
-//        ofFill();
-//        ofCircle(cells[i].pt, 2);
-//    }
+    ofRectangle bounds = voronoi.getBounds();
+    ofSetLineWidth(0);
+    ofNoFill();
+    ofSetColor(220);
+    ofDrawRectangle(bounds);
+    
+    vector <ofxVoronoiCell> cells = voronoi.getCells();
+    for(int i=0; i<cells.size(); i++) {
+        ofSetColor(0);
+        ofNoFill();
+        ofMesh mesh;
+        mesh.setMode(OF_PRIMITIVE_LINE_LOOP);
+        mesh.addVertices(cells[i].pts);
+        mesh.draw();
+        
+        mesh.clear();
+        for(int j = 0; j < cells[i].pts.size(); j++) {
+            mesh.addVertex(cells[i].pt);
+            mesh.addVertex(cells[i].pts[j]);
+        }
+        ofSetColor(120);
+        mesh.draw();
+        
+        // Draw cell points
+        ofSetColor(ofColor::fromHsb(255. * i / cells.size(), 255., 255.));
+        ofFill();
+        ofDrawCircle(cells[i].pt, 2);
+    }
 }
 
 //--------------------------------------------------------------
@@ -90,7 +91,16 @@ bool ofApp::isBorder(ofPoint _pt){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-
+    int n = 0;
+    switch(key) {
+        case '1': n = 1; break;
+        case '2': n = 10; break;
+        case '3': n = 100; break;
+        case '4': n = 1000; break;
+    }
+    for(int i = 0; i < n; i++) {
+        voronoi.relax();
+    }
 }
 
 //--------------------------------------------------------------
