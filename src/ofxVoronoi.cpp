@@ -118,9 +118,7 @@ void ofxVoronoi::addPoint(ofPoint _point) {
 
 //--------------------------------------------------------------
 void ofxVoronoi::addPoints(vector<ofPoint> _points) {
-    for(std::vector<ofPoint>::iterator it=_points.begin(); it!=_points.end(); ++it) {
-        addPoint(*it);
-    }
+    points.insert( points.end(), _points.begin(), _points.end() );
 }
 
 //--------------------------------------------------------------
