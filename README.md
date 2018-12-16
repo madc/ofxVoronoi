@@ -28,3 +28,6 @@ Contributors:
 [Todd Vanderlin](https://github.com/vanderlin)  
 [Matthias Esterl](https://github.com/madc)  
 [Andreas Borg](https://github.com/borg) 
+[Amnon Owed](https://github.com/AmnonOwed)
+[Kyle McDonald](https://github.com/kylemcdonald)
+[Rafael Redondo](https://github.com/valillon)

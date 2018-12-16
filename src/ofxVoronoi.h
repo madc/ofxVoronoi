@@ -1,3 +1,15 @@
+/*
+ *  ofxVoronoi.h
+ *
+ * \brief This addon allows the generation of simple two-dimensional voronoi diagrams inside openframeworks.
+ * It uses a modified version of Stephan Fortune's sweep line algorithm written by Chris H. Rycroft for the Voro++ project.
+ *
+ * Added support for Lloyd's algorithm useful for relaxing the diagram for use with stippling effects.
+ * https://en.wikipedia.org/wiki/Lloyd%27s_algorithm
+ *
+ * Contributors: Todd Vanderlin, Matthias Esterl, Andreas Borg, Amnon Owed, Rafael Redondo.
+ */
+
 #pragma once
 
 #include "ofMain.h"
@@ -13,8 +25,8 @@ class ofxVoronoi {
     
 public:
     
-    ofxVoronoi();
-    ~ofxVoronoi();
+    ofxVoronoi(){};
+    ~ofxVoronoi(){};
     
     /// \brief clear deletes cells and points
     void clear();
