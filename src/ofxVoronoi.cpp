@@ -14,12 +14,6 @@
 #include "ctr_boundary_2d.h"
 
 //--------------------------------------------------------------
-ofxVoronoi::ofxVoronoi() {}
-
-//--------------------------------------------------------------
-ofxVoronoi::~ofxVoronoi() {}
-
-//--------------------------------------------------------------
 void ofxVoronoi::clear() {
     cells.clear();
     points.clear();
@@ -78,42 +72,32 @@ void ofxVoronoi::generate(bool ordered) {
 
 //--------------------------------------------------------------
 void ofxVoronoi::draw() {
+    
+    ofPushStyle();
+    
     ofSetLineWidth(0);
-    ofNoFill();
     
-    // Draw bounds
-    ofSetColor(220);
-    ofDrawRectangle(bounds);
-    
-    ofSetColor(180, 0, 0);
-    
+    // Draw cells
+    ofFill();
+
     for(int i=0; i<cells.size(); i++) {
         // Draw cell borders
-        ofSetColor(120);
+        ofSetColor(220, 220, 220, 180);
         for(int j=0; j<cells[i].pts.size(); j++) {
-            ofPoint lastPt = cells[i].pts[cells[i].pts.size()-1];
-            if(j > 0) {
-                lastPt = cells[i].pts[j-1];
-            }
-            ofPoint thisPt = cells[i].pts[j];
-            
-            if(!isBorder(lastPt) || !isBorder(thisPt)) {
-                ofDrawLine(lastPt, thisPt);
-            }
+            size_t p = (j+1) % cells[i].pts.size();
+            ofDrawLine(cells[i].pts[p], cells[i].pts[j]);
         }
-        
-        ofFill();
         // Draw cell points
-        ofSetColor(180, 0, 0);
-        ofFill();
+        ofSetColor(180, 0, 0, 180);
         ofDrawCircle(cells[i].pt, 2);
     }
-}
 
-//--------------------------------------------------------------
-bool ofxVoronoi::isBorder(ofPoint _pt){
-    return (_pt.x == bounds.x || _pt.x == bounds.x+bounds.width
-            || _pt.y == bounds.y || _pt.y == bounds.y+bounds.height);
+    // Draw bounds
+    ofSetColor(220, 0, 0, 180);
+    ofNoFill();
+    ofDrawRectangle(bounds);
+
+    ofPopStyle();
 }
 
 //--------------------------------------------------------------
@@ -124,7 +108,6 @@ void ofxVoronoi::setBounds(ofRectangle _bounds) {
 //--------------------------------------------------------------
 void ofxVoronoi::setPoints(vector<ofPoint> _points) {
     clear();
-    
     points = _points;
 }
 
@@ -155,15 +138,16 @@ vector <ofxVoronoiCell>& ofxVoronoi::getCells() {
     return cells;
 }
 
-
-//https://en.wikipedia.org/wiki/Lloyd%27s_algorithm
+//--------------------------------------------------------------
 void ofxVoronoi::relax(){
     vector<ofPoint> relaxPts;
     for(int i=0; i<cells.size(); i++) {
-        ofPolyline p;
-        p.addVertices(cells[i].pts);
-        p.close();
-        ofPoint centroid = p.getCentroid2D();
+        ofPolyline line;
+        for (auto p:cells[i].pts){
+            line.addVertex(p.x, p.y);
+        }
+        line.close();
+        ofPoint centroid = line.getCentroid2D();
         relaxPts.push_back(centroid);
     }
     clear();
@@ -194,6 +178,3 @@ ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point, bool approximate) {
         return cells[0];
     }
 }
-
-
-
