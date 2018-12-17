@@ -35,19 +35,19 @@ void ofxVoronoi::generate(bool ordered) {
             int k = 0;
             
             if(conCell.p) {
-                ofxVoronoiCell newCell = ofxVoronoiCell();
+                ofxVoronoiCell newCell;
                 
                 // Get the current point of the cell
                 double* currentPoint = con->p[vl->ij]+con->ps*vl->q;
-                newCell.pt = ofPoint(currentPoint[0], currentPoint[1]);
+                newCell.centroid = ofDefaultVec3(currentPoint[0], currentPoint[1], 0);
                 
                 // Get the edgepoints of the cell
                 do {
                     float x = currentPoint[0] + 0.5 * conCell.pts[2*k];
                     float y = currentPoint[1] + 0.5 * conCell.pts[2*k+1];
                     
-                    ofPoint pt = ofPoint(x, y);
-                    newCell.pts.push_back(pt);
+                    ofDefaultVec3 pt = ofDefaultVec3(x, y, 0);
+                    newCell.points.push_back(pt);
                     
                     k = conCell.ed[2*k];
                 } while(k!=0);
@@ -61,10 +61,10 @@ void ofxVoronoi::generate(bool ordered) {
     delete con, vl;
     
     if(ordered) {
-        vector<ofxVoronoiCell> orderedCells;
-        for(auto& pt : points) {
-//            ofLog() << pt;
-            orderedCells.push_back(getCell(pt));
+        std::vector<ofxVoronoiCell> orderedCells;
+        for(auto& p : points) {
+            // ofLog() << p;
+            orderedCells.push_back(getCell(p));
         }
         cells = orderedCells;
     }
@@ -83,13 +83,13 @@ void ofxVoronoi::draw() {
     for(int i=0; i<cells.size(); i++) {
         // Draw cell borders
         ofSetColor(220, 220, 220, 180);
-        for(int j=0; j<cells[i].pts.size(); j++) {
-            size_t p = (j+1) % cells[i].pts.size();
-            ofDrawLine(cells[i].pts[p], cells[i].pts[j]);
+        for(int j=0; j<cells[i].points.size(); j++) {
+            size_t p = (j+1) % cells[i].points.size();
+            ofDrawLine(cells[i].points[p], cells[i].points[j]);
         }
         // Draw cell points
         ofSetColor(180, 0, 0, 180);
-        ofDrawCircle(cells[i].pt, 2);
+        ofDrawCircle(cells[i].centroid, 2);
     }
 
     // Draw bounds
@@ -106,18 +106,18 @@ void ofxVoronoi::setBounds(ofRectangle _bounds) {
 }
 
 //--------------------------------------------------------------
-void ofxVoronoi::setPoints(vector<ofPoint> _points) {
+void ofxVoronoi::setPoints(std::vector<ofDefaultVec3> _points) {
     clear();
     points = _points;
 }
 
 //--------------------------------------------------------------
-void ofxVoronoi::addPoint(ofPoint _point) {
+void ofxVoronoi::addPoint(ofDefaultVec3 _point) {
     points.push_back(_point);
 }
 
 //--------------------------------------------------------------
-void ofxVoronoi::addPoints(vector<ofPoint> _points) {
+void ofxVoronoi::addPoints(std::vector<ofDefaultVec3> _points) {
     points.insert( points.end(), _points.begin(), _points.end() );
 }
 
@@ -127,25 +127,25 @@ ofRectangle ofxVoronoi::getBounds() {
 }
 
 //--------------------------------------------------------------
-vector<ofPoint>& ofxVoronoi::getPoints() {
+std::vector<ofDefaultVec3>& ofxVoronoi::getPoints() {
     return points;
 }
 
 //--------------------------------------------------------------
-vector <ofxVoronoiCell>& ofxVoronoi::getCells() {
+std::vector<ofxVoronoiCell>& ofxVoronoi::getCells() {
     return cells;
 }
 
 //--------------------------------------------------------------
 void ofxVoronoi::relax(){
-    vector<ofPoint> relaxPts;
+    std::vector<ofDefaultVec3> relaxPts;
     for(int i=0; i<cells.size(); i++) {
         ofPolyline line;
-        for (auto p:cells[i].pts){
+        for (auto p:cells[i].points){
             line.addVertex(p.x, p.y);
         }
         line.close();
-        ofPoint centroid = line.getCentroid2D();
+        ofDefaultVec3 centroid = line.getCentroid2D();
         relaxPts.push_back(centroid);
     }
     clear();
@@ -154,12 +154,12 @@ void ofxVoronoi::relax(){
 };
 
 //--------------------------------------------------------------
-ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point, bool approximate) {
+ofxVoronoiCell& ofxVoronoi::getCell(ofDefaultVec3 _point, bool approximate) {
     if(approximate) {
         ofxVoronoiCell& nearestCell = cells[0];
         float nearestDistance = numeric_limits<float>::infinity();
         for(ofxVoronoiCell& cell : cells) {
-            float distance = _point.squareDistance(cell.pt);
+            float distance = getDistance(_point, cell.centroid);
             if(distance < nearestDistance) {
                 nearestDistance = distance;
                 nearestCell = cell;
@@ -168,7 +168,7 @@ ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point, bool approximate) {
         return nearestCell;
     } else {
         for(ofxVoronoiCell& cell : cells) {
-            if(_point == cell.pt) {
+            if(_point == cell.centroid) {
                 return cell;
             }
         }
@@ -176,3 +176,11 @@ ofxVoronoiCell& ofxVoronoi::getCell(ofPoint _point, bool approximate) {
         return cells[0];
     }
 }
+
+float ofxVoronoi::getDistance(ofPoint p1, ofPoint p2){
+    return p1.squareDistance(p2);
+}
+float ofxVoronoi::getDistance(glm::vec3 p1, glm::vec3 p2){
+    return glm::distance2(p1, p2);
+}
+
