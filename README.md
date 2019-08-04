@@ -8,11 +8,11 @@ This addon allows the generation of simple two-dimensional voronoi diagrams insi
 
 ![Basic Example](https://github.com/madc/ofxVoronoi/raw/master/ofxVoronoi_Screenshot.png)
 
-
 Now with added support for [Lloyd's algorithm](https://en.wikipedia.org/wiki/Lloyd%27s_algorithm) useful for relaxing the diagram for use with stippling effects.
 
 Example:  
 Create as usual
+
 ```
 ofxVoronoi relaxedVoronoi;
 relaxedVoronoi.setBounds(bounds);
@@ -24,6 +24,7 @@ while(relaxIterations--){
 	relaxedVoronoi.relax();
 }
 ```
+
 Contributors:  
 [Todd Vanderlin](https://github.com/vanderlin)  
 [Matthias Esterl](https://github.com/madc)  
