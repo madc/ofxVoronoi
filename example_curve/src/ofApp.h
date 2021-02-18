@@ -21,6 +21,8 @@ public:
     void update();
     void draw();
 
+	int relaxIterations;
+
     void keyPressed(int key);
     void keyReleased(int key);
     void mouseMoved(int x, int y );
