@@ -41,6 +41,8 @@ public:
     /// \params _bounds rectangular boundary.
     void setBounds(ofRectangle _bounds);
     
+    void setBounds(ofPolyline _outline);
+
     /// \brief setPoints sets a new list of points from which the Voronoi cells will be generated.
     /// Points and cells previously added will be cleared.
     /// \param _points a list of points in std::vector format.
@@ -54,7 +56,7 @@ public:
     /// \param _points is a list of points in std::vector format.
     void addPoints(std::vector<ofDefaultVec3> _points);
     
-    /// \brief getBound retrieces the bounds.
+    /// \brief getBound retrieves the bounds.
     /// \return rectangular bounds.
     ofRectangle getBounds();
     
@@ -76,10 +78,16 @@ public:
     void relax();
     
 private:
-    
-    ofRectangle bounds;                             ///< Rectangular bound where Voronoi cells are generated.
-    std::vector<ofDefaultVec3> points;              ///< List of points to generate the Voronoi cells.
-    std::vector<ofxVoronoiCell> cells;              ///< The list of Voronoi cells.
-    float getDistance(ofPoint p1, ofPoint p2);      ///< Auxiliar method for distance calculation
-    float getDistance(glm::vec3 p1, glm::vec3 p2);  ///< Auxiliar method for distance calculation
+    ofPolyline outline;                                ///< Vector shape where Voronoi cells are generated.
+    std::vector<ofDefaultVec3> points;                 ///< List of points to generate the Voronoi cells.
+    std::vector<ofxVoronoiCell> cells;                 ///< The list of Voronoi cells.
+    ofPoint intersection(ofPoint p1, ofPoint p2,
+                         ofPoint p3, ofPoint p4);      ///< Auxiliar method for calculating virtual intersection
+    ofPoint getNormalised(ofPoint p1, ofPoint p2);     ///< Auxiliar method for normalising vectors
+    ofPoint getMidPoint(ofPoint p1, ofPoint p2);       ///< Auxiliar method for calculating mid point
+    double getDistance(ofPoint p1, ofPoint p2);        ///< Auxiliar method for distance calculation
+    double getDistance(glm::vec3 p1, glm::vec3 p2);    ///< Auxiliar method for distance calculation
+    double getRadians(ofPoint p1, ofPoint p2);         ///< Auxiliar method for radians calculation
+    double getDegrees(ofPoint p1, ofPoint p2);         ///< Auxiliar method for degrees calculation
+    double getPositiveDegrees(ofPoint p1, ofPoint p2); ///< Auxiliar method for degrees calculation
 };
